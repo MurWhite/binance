@@ -1,44 +1,44 @@
-import { connect } from 'react-redux';
-import React, { Component } from 'react';
-import { actionTypes } from '../../store/home/actions'
+import { connect } from "react-redux";
+import React, { Component } from "react";
+import { actionTypes } from "../../store/home/actions";
 import "./list.scss";
 
 function renderColoredSpan(judge = 0, content) {
-  let className = '';
+  let className = "";
   if (judge > 0) {
-    className = 'rise'
+    className = "rise";
   } else if (judge < 0) {
-    className = 'fall'
+    className = "fall";
   }
-  return (<span className={className}>{content}</span>);
+  return <span className={className}>{content}</span>;
 }
 
 function tabClassName(active, descend) {
   let className = [];
-  active && className.push('active');
-  descend && className.push('descend');
-  return className.join(' ');
+  active && className.push("active");
+  descend && className.push("descend");
+  return className.join(" ");
 }
 
 const tabList = [
-  { key: 'symbol', label: 'symbol' },
-  { key: 'lastPrice', label: 'lastPrice' },
-  { key: 'priceChange', label: 'priceChange/24h' },
-  { key: 'highPrice', label: 'highPrice/24h' },
-  { key: 'lowPrice', label: 'lowPrice/24h' },
-  { key: 'quoteVolume', label: 'quoteVolume/24h' },
-]
+  { key: "symbol", label: "symbol" },
+  { key: "lastPrice", label: "lastPrice" },
+  { key: "priceChange", label: "priceChange/24h" },
+  { key: "highPrice", label: "highPrice/24h" },
+  { key: "lowPrice", label: "lowPrice/24h" },
+  { key: "quoteVolume", label: "quoteVolume/24h" }
+];
 
 class List extends Component {
   constructor() {
     super();
     this.state = {
-      sortKey: '',
-      descend: true,
+      sortKey: "",
+      descend: true
     };
   }
 
-  sort = (key) => {
+  sort = key => {
     const { dispatch } = this.props;
     let { sortKey, descend } = this.state;
     if (sortKey === key) {
@@ -46,16 +46,16 @@ class List extends Component {
     } else {
       descend = true;
     }
-    this.setState({ sortKey: key, descend});
-    dispatch({ type: actionTypes.SORT_LIST, key, descend })
-  }
+    this.setState({ sortKey: key, descend });
+    dispatch({ type: actionTypes.SORT_LIST, key, descend });
+  };
 
-  handleTHeadClick = (e) => {
+  handleTHeadClick = e => {
     const node = e.target;
-    if (node.tagName === 'TH' && node.dataset.key) {
+    if (node.tagName === "TH" && node.dataset.key) {
       this.sort(node.dataset.key);
     }
-  }
+  };
 
   render() {
     const { list } = this.props;
@@ -65,32 +65,50 @@ class List extends Component {
         <thead>
           <tr onClick={this.handleTHeadClick}>
             {tabList.map(tab => (
-              <th key={tab.key} data-key={tab.key} className={tabClassName(sortKey===tab.key, descend)}>{tab.label}</th>
+              <th
+                key={tab.key}
+                data-key={tab.key}
+                className={tabClassName(sortKey === tab.key, descend)}
+              >
+                {tab.label}
+              </th>
             ))}
           </tr>
         </thead>
         <tbody>
-        {list.map((item) => {
-          return (
-          <tr key={item.symbol} style={{display: Number(item.quoteVolume)===0?'none':''}}>
-            <td>{item.symbol}</td>
-            <td>{renderColoredSpan(item.lastPriceChange, item.lastPrice)}</td>
-            <td data-price={item.priceChangePercent}>{renderColoredSpan(item.priceChangePercent, `${item.priceChangePercent}%`)}</td>
-            <td>{item.highPrice}</td>
-            <td>{item.lowPrice}</td>
-            <td>{item.quoteVolume}</td>
-          </tr>
-          )
-        })}
+          {list.map(item => {
+            return (
+              <tr
+                key={item.symbol}
+                style={{
+                  display: Number(item.quoteVolume) === 0 ? "none" : ""
+                }}
+              >
+                <td>{item.symbol}</td>
+                <td>
+                  {renderColoredSpan(item.lastPriceChange, item.lastPrice)}
+                </td>
+                <td data-price={item.priceChangePercent}>
+                  {renderColoredSpan(
+                    item.priceChangePercent,
+                    `${item.priceChangePercent}%`
+                  )}
+                </td>
+                <td>{item.highPrice}</td>
+                <td>{item.lowPrice}</td>
+                <td>{item.quoteVolume}</td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
-    )
+    );
   }
 }
 
-function mapStateToProps ( state ) {
+function mapStateToProps(state) {
   const { list } = state.home;
-  return { list }
+  return { list };
 }
 
-export default connect(mapStateToProps)(List)
+export default connect(mapStateToProps)(List);

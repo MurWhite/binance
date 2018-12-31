@@ -1,17 +1,17 @@
-import { combineReducers } from 'redux';
-import { actionTypes } from './actions';
+import { combineReducers } from "redux";
+import { actionTypes } from "./actions";
 
 function updateSymbolList(oldList, newList) {
   const resultList = [...oldList];
-  return resultList.map((d) => {
+  return resultList.map(d => {
     const n = newList.filter(t => t.symbol === d.symbol)[0];
     if (n) {
-      d = {...d, ...n, lastPriceChange: n.lastPrice - d.lastPrice};
+      d = { ...d, ...n, lastPriceChange: n.lastPrice - d.lastPrice };
     } else {
       d.lastPriceChange = 0;
     }
     return d;
-  })
+  });
 }
 
 function sortList(list, key, descend = true) {
@@ -26,29 +26,29 @@ function sortList(list, key, descend = true) {
       return diff ? 1 : -1;
     }
     return diff ? -1 : 1;
-  })
+  });
   return [...list];
 }
 
 const list = (list = [], action) => {
   switch (action.type) {
-    case actionTypes.UPDATE_LIST: 
+    case actionTypes.UPDATE_LIST:
       return action.list;
     case actionTypes.UPDATE_SYMBOL:
       return updateSymbolList(list, action.list);
     case actionTypes.SORT_LIST:
-      return sortList(list, action.key, action.descend)
+      return sortList(list, action.key, action.descend);
   }
   return list;
 };
 
-const ws = (ws = { status: 'disconnect' }, action) => {
+const ws = (ws = { status: "disconnect" }, action) => {
   if (action.type === actionTypes.UPDATE_WS) {
-    return Object.assign({}, ws, {status: action.status})
+    return Object.assign({}, ws, { status: action.status });
   }
   return ws;
-}
+};
 export default combineReducers({
   list,
-  ws,
+  ws
 });

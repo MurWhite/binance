@@ -1,22 +1,22 @@
 .table-list {
-    font-size: 12px;
+  font-size: 12px;
 
-    span.rise {
-        color: green;
-    }
-    span.fall {
-        color: red;
-    }
+  span.rise {
+    color: green;
+  }
+  span.fall {
+    color: red;
+  }
 
-    thead {
-        th.active {
-            color: red; 
-            &::after {
-                content: '↑'
-            }
-            &.descend::after {
-                content: '↓'
-            }
-        }
+  thead {
+    th.active {
+      color: red;
+      &::after {
+        content: "↑";
+      }
+      &.descend::after {
+        content: "↓";
+      }
     }
+  }
 }
