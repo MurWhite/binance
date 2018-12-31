@@ -9,7 +9,12 @@ export const actionTypes = {
 };
 
 export const serverFetchList = async isServer => {
-  const list = await API.fetchRecentTickerList();
+  let list = [];
+  try {
+    list = await API.fetchRecentTickerList();
+  } catch (error) {
+    console.error("Fetch 24h-ticker Error:", error);
+  }
   return dispatch => {
     return dispatch({ type: actionTypes.UPDATE_LIST, list });
   };
@@ -35,7 +40,7 @@ export const initListWs = dispatch => {
     dispatch({ type: actionTypes.UPDATE_WS, status: wsStatus.CLOSED });
   };
   ws.handleMsg = message => {
-    const list = (message.data || []).map(t => convert(t));
+    const list = (message.data || []).map(convert);
     dispatch({ type: actionTypes.UPDATE_SYMBOL, list });
   };
 };

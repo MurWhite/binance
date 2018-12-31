@@ -34,8 +34,6 @@ export const getWebsocket = function(wsType) {
     websocket.onmessage = function(e) {
       if (typeof e.data === "string") {
         ws.handleMsg && ws.handleMsg(JSON.parse(e.data));
-      } else {
-        console.log("smth else", e);
       }
     };
     websocket.onerror = function() {
